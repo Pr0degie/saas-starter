@@ -18,6 +18,7 @@ export async function POST() {
   }
 
   try {
+    // Schedules cancellation at period end — access stays active until then.
     await stripe.subscriptions.update(subscription.stripeSubscriptionId, {
       cancel_at_period_end: true,
     });

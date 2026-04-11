@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgraded=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing`,
       metadata: { userId: session.user.id },
+      // userId in subscription metadata lets the webhook identify the user without a DB lookup.
       subscription_data: {
         metadata: { userId: session.user.id },
       },

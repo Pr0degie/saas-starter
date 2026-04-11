@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   const password = await bcrypt.hash("admin1234", 12);
 
+  // update: {} makes this idempotent — re-running seed won't overwrite an existing admin.
   await prisma.user.upsert({
     where: { email: "admin@example.com" },
     update: {},

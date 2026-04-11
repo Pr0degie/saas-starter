@@ -18,6 +18,7 @@ export async function PATCH(req: NextRequest) {
 
   const { name, email } = parsed.data;
 
+  // Only check uniqueness when the email actually changes.
   if (email && email !== session.user.email) {
     const existing = await db.user.findUnique({ where: { email } });
     if (existing) {

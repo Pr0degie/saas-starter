@@ -11,6 +11,7 @@ type ExtendedUser = PrismaUser & { role: string };
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
+  // JWT required: Credentials provider is incompatible with database sessions.
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
@@ -18,6 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
+      // Runs on sign-in: persist id and role into the token for later reads.
       if (user) {
         const u = user as unknown as ExtendedUser;
         token.id = u.id;
@@ -26,6 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   return token;
 },
     async session({ session, token }) {
+      // Expose id and role to the client session object.
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
@@ -47,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { email: parsed.data.email },
         });
 
+        // No password means the account was created via OAuth — block credentials login.
         if (!user?.password) return null;
 
         const valid = await bcrypt.compare(parsed.data.password, user.password);

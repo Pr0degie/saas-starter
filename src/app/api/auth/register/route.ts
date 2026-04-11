@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const hashed = await bcrypt.hash(password, 12);
+    const hashed = await bcrypt.hash(password, 12); // cost factor 12 — ~250ms, good balance of security and latency
 
     await db.user.create({
       data: { name, email, password: hashed },

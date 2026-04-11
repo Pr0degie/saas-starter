@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import type Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
+  // Must read as raw text — JSON parsing would break the signature check.
   const body = await req.text();
   const sig = req.headers.get("stripe-signature")!;
 
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
+// Converts Stripe's subscription status strings to our DB enum values.
 function mapStatus(status: Stripe.Subscription.Status) {
   const map: Record<string, "ACTIVE" | "INACTIVE" | "PAST_DUE" | "CANCELED" | "TRIALING"> = {
     active: "ACTIVE",

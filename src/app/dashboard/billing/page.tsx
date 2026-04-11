@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default function BillingPage() {
+  // Tracks which button is in-flight: "upgrade" | "cancel" | null.
   const [loading, setLoading] = useState<string | null>(null);
 
   async function handleUpgrade(priceId: string) {
@@ -18,7 +19,7 @@ export default function BillingPage() {
     });
     const data = await res.json();
     setLoading(null);
-    if (data.url) window.location.href = data.url;
+    if (data.url) window.location.href = data.url; // redirect to Stripe-hosted checkout
   }
 
   async function handleCancel() {
@@ -26,7 +27,7 @@ export default function BillingPage() {
     setLoading("cancel");
     await fetch("/api/stripe/cancel", { method: "POST" });
     setLoading(null);
-    window.location.reload();
+    window.location.reload(); // hard reload to reflect updated subscription state from the server
   }
 
   return (

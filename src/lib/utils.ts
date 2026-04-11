@@ -13,6 +13,7 @@ export function formatDate(date: Date | string) {
   }).format(new Date(date));
 }
 
+// amount is in cents (Stripe convention) — divide by 100 before display.
 export function formatCurrency(amount: number, currency = "EUR") {
   return new Intl.NumberFormat("de-DE", {
     style: "currency",

@@ -36,7 +36,7 @@ export default function AccountPage() {
     if (!res.ok) {
       setError(data.error ?? "Something went wrong.");
     } else {
-      await update({ name, email });
+      await update({ name, email }); // syncs the client-side NextAuth session without re-login
       setPassword("");
       setMessage("Account updated successfully.");
     }

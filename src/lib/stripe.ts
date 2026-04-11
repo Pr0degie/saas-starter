@@ -5,6 +5,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
 });
 
+// price is display-only (euros). Stripe uses priceId for the actual charge.
 export const PLANS = {
   free: {
     name: "Free",
@@ -28,7 +29,9 @@ export const PLANS = {
 
 export type Plan = keyof typeof PLANS;
 
+// Returns an existing Stripe customer ID or creates one and links it to the DB subscription row.
 export async function getOrCreateCustomer(userId: string, email: string) {
+  // Dynamic import avoids a circular dependency with db.ts at module load time.
   const { db } = await import("@/lib/db");
 
   let subscription = await db.subscription.findUnique({

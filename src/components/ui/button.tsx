@@ -42,5 +42,5 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = "Button";
+Button.displayName = "Button"; // required by forwardRef to preserve name in React DevTools
 export { Button };

@@ -10,6 +10,7 @@ export default auth((req) => {
   const isDashboard = nextUrl.pathname.startsWith("/dashboard");
   const isAdmin = nextUrl.pathname.startsWith("/admin");
 
+  // Prevent logged-in users from re-visiting login/register pages.
   if (isAuthRoute && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
@@ -17,6 +18,7 @@ export default auth((req) => {
   if (isDashboard && !isLoggedIn) {
     return NextResponse.redirect(new URL("/auth/login", nextUrl));
   }
+  // Non-admin users are silently redirected rather than shown a 403.
   if (isAdmin && session?.user?.role !== "ADMIN") {
   return NextResponse.redirect(new URL("/dashboard", nextUrl));
 }
@@ -25,5 +27,6 @@ export default auth((req) => {
 });
 
 export const config = {
+  // Skip API routes and Next.js internals — middleware only guards pages.
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

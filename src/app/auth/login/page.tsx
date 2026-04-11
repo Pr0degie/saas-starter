@@ -19,6 +19,7 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
+    // redirect: false — handle navigation ourselves instead of a server-side redirect.
     const result = await signIn("credentials", {
       email,
       password,
