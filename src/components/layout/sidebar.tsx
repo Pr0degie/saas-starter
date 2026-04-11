@@ -10,13 +10,17 @@ const nav = [
   { href: "/dashboard/billing", label: "Billing", icon: CreditCardIcon },
   { href: "/account", label: "Account", icon: UserIcon },
 ];
+const adminNav = [
+  { href: "/admin", label: "Users", icon: UsersIcon },
+];
 
 interface SidebarProps {
   userName?: string | null;
   userEmail?: string | null;
+  isAdmin?: boolean | null;
 }
 
-export function Sidebar({ userName, userEmail }: SidebarProps) {
+export function Sidebar({ userName, userEmail, isAdmin }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -41,6 +45,28 @@ export function Sidebar({ userName, userEmail }: SidebarProps) {
             {label}
           </Link>
         ))}
+        {isAdmin && (
+          <>
+            <div className="pt-4 pb-1 px-3">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600">Admin</p>
+            </div>
+            {adminNav.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                  pathname === href
+                    ? "bg-white/10 text-white"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                )}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                {label}
+              </Link>
+            ))}
+          </>
+        )}
       </nav>
 
       <div className="p-3 border-t border-white/5">
@@ -88,6 +114,14 @@ function LogOutIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg>
+  );
+}
+
+function UsersIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
     </svg>
   );
 }
