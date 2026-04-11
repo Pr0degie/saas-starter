@@ -27,3 +27,31 @@ export const PLANS = {
 } as const;
 
 export type Plan = keyof typeof PLANS;
+
+export async function getOrCreateCustomer(userId: string, email: string) {
+  const { db } = await import("@/lib/db");
+
+  let subscription = await db.subscription.findUnique({
+    where: { userId },
+  });
+
+  if (subscription?.stripeCustomerId) {
+    return subscription.stripeCustomerId;
+  }
+
+  const customer = await stripe.customers.create({
+    email,
+    metadata: { userId },
+  });
+
+  await db.subscription.upsert({
+    where: { userId },
+    update: { stripeCustomerId: customer.id },
+    create: {
+      userId,
+      stripeCustomerId: customer.id,
+    },
+  });
+
+  return customer.id;
+}
