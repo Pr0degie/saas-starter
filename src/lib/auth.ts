@@ -11,6 +11,7 @@ type ExtendedUser = PrismaUser & { role: string };
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
+  trustHost: true,
   // JWT required: Credentials provider is incompatible with database sessions.
   session: { strategy: "jwt" },
   pages: {
