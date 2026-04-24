@@ -24,7 +24,7 @@ A production-ready Next.js SaaS starter with authentication, Stripe billing, rol
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/your-username/saas-starter.git
+git clone https://github.com/Pr0degie/saas-starter.git
 cd saas-starter
 npm install
 ```
